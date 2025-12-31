@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Red Eye Films</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+</head>
+<body>
+
+  <div id="nav-slot"></div>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker"><span class="kicker-dot"></span> Portfolio / Studio</div>
+        <h1>Red Eye Films</h1>
+        <p>
+          Red Eye Films is the creative outlet of Tristan Lake — offering graphic design, video production,
+          video editing, music video direction, commercial work, and audio editing. Merchandise coming soon.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/work/">View Work</a>
+        <a class="btn btn-ghost" href="/contact/">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+
+      <section class="section">
+        <div class="h2">Services</div>
+        <div class="pill-grid">
+          <div class="pill">Graphic Design</div>
+          <div class="pill">Video Production</div>
+          <div class="pill">Video Editing</div>
+          <div class="pill">Music Video Direction</div>
+          <div class="pill">Commercial Work</div>
+          <div class="pill">Audio Editing</div>
+          <div class="pill soon">Merch — Coming Soon</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="h2">Featured</div>
+      
+        <!-- DESIGN -->
+        <div class="featured-block">
+          <div class="featured-head">
+            <div class="featured-title">Design</div>
+            <div class="featured-note">A few recent pieces</div>
+          </div>
+      
+          <div class="scroller">
+            <!-- Posters / Ads / Layout -->
+            <a class="tile-link" href="/work/">
+              <article class="tile tile--img">
+                <div class="tile-media">
+                  <img src="/assets/img/DropThaBallYo.png" alt="Posters / Ads / Layout example">
+                  <div class="tile-overlay">
+                    <span class="tile-chip"><span class="dot"></span> Print / Digital</span>
+                  </div>
+                </div>
+                <div class="tile-body">
+                  <div class="name">Posters / Ads / Layout</div>
+                  <div class="desc">Bold typography, clean structure, fast readability.</div>
+                  <div class="cta">View work →</div>
+                </div>
+              </article>
+            </a>
+      
+            <!-- Identity Systems -->
+            <a class="tile-link" href="/work/">
+              <article class="tile tile--img">
+                <div class="tile-media">
+                  <img src="/assets/img/LBRCIrcleLogoWBurds.png" alt="Identity Systems example">
+                  <div class="tile-overlay">
+                    <span class="tile-chip"><span class="dot"></span> Branding</span>
+                  </div>
+                </div>
+                <div class="tile-body">
+                  <div class="name">Identity Systems</div>
+                  <div class="desc">Logos, marks, templates, and consistent visual rules.</div>
+                  <div class="cta">View work →</div>
+                </div>
+              </article>
+            </a>
+      
+            <!-- Layouts / Guides -->
+            <a class="tile-link" href="/work/">
+              <article class="tile tile--img">
+                <div class="tile-media">
+                  <img src="/assets/img/phevSpreadText.png" alt="Layouts / Guides example">
+                  <div class="tile-overlay">
+                    <span class="tile-chip"><span class="dot"></span> Editorial</span>
+                  </div>
+                </div>
+                <div class="tile-body">
+                  <div class="name">Layouts / Guides</div>
+                  <div class="desc">Magazine-style spreads with modern hierarchy.</div>
+                  <div class="cta">View work →</div>
+                </div>
+              </article>
+            </a>
+          </div>
+        </div>
+      </section>
+      
+      
+
+    </div>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="assets/js/site.js"></script>
+  <script>
+    loadPartial("#nav-slot", "/partials/nav.html");
+    loadPartial("#footer-slot", "/partials/footer.html");
+    setYear();
+  </script>
+</body>
+</html>
