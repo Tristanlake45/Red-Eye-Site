@@ -7,6 +7,7 @@ async function loadPartial(selector, partialPath) {
       el.innerHTML = `<!-- Failed to load partial: ${partialPath} (${res.status}) -->`;
       return;
     }
+  
     el.innerHTML = await res.text();
   
     // Active nav link
@@ -18,18 +19,19 @@ async function loadPartial(selector, partialPath) {
         a.classList.add("active");
       }
     });
+  
+    // IMPORTANT: nav exists now, so wire up mobile toggle now
+    initMobileNav();
   }
   
-  function setYear() {
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
-  }
-  
-  // Mobile nav toggle
-(function () {
+  function initMobileNav() {
     const btn = document.querySelector(".nav-toggle");
     const nav = document.querySelector("#primary-nav");
     if (!btn || !nav) return;
+  
+    // prevent double-binding if loadPartial runs more than once
+    if (btn.dataset.bound === "1") return;
+    btn.dataset.bound = "1";
   
     function setOpen(open) {
       nav.classList.toggle("open", open);
@@ -41,15 +43,18 @@ async function loadPartial(selector, partialPath) {
       setOpen(!isOpen);
     });
   
-    // Close on link click (mobile)
     nav.addEventListener("click", (e) => {
       const a = e.target.closest("a");
       if (a) setOpen(false);
     });
   
-    // Close on Escape
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setOpen(false);
     });
-  })();
+  }
+  
+  function setYear() {
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  }
   
