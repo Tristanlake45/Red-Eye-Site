@@ -25,4 +25,31 @@ async function loadPartial(selector, partialPath) {
     if (y) y.textContent = new Date().getFullYear();
   }
   
+  // Mobile nav toggle
+(function () {
+    const btn = document.querySelector(".nav-toggle");
+    const nav = document.querySelector("#primary-nav");
+    if (!btn || !nav) return;
+  
+    function setOpen(open) {
+      nav.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+  
+    btn.addEventListener("click", () => {
+      const isOpen = nav.classList.contains("open");
+      setOpen(!isOpen);
+    });
+  
+    // Close on link click (mobile)
+    nav.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if (a) setOpen(false);
+    });
+  
+    // Close on Escape
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") setOpen(false);
+    });
+  })();
   
