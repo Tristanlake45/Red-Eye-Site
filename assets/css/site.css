@@ -1085,4 +1085,139 @@
       transform: none !important;
     }
   }
+
+  /* =========================
+   HOME: HEADER LOGO BAND
+   ========================= */
+
+.logo-band{
+  /* sits against page, no global color bleed */
+  padding: 1.25rem 0 0.75rem;
+}
+
+.logo-band-inner{
+  display: flex;
+  justify-content: center;
+}
+
+/* The hover area (only this area turns red) */
+.logo-band-hit{
+  width: 100%;
+  border-radius: 18px;
+  padding: clamp(1.2rem, 2.2vw, 2rem);
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(11,11,13,0.12);
+  transition: background 220ms ease, border-color 220ms ease;
+  overflow: hidden; /* keeps it clean */
+}
+
+/* Fade in on load */
+.logo-band{
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+.logo-band.is-ready{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Big logo, majority width */
+.logo-band-img{
+  width: min(980px, 92%);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  will-change: transform;
+  transition: transform 160ms ease;
+  user-select: none;
+}
+
+/* Hover: only the band turns red; logo source swaps via JS */
+.logo-band-hit.is-hover{
+  background: #ff0000;
+  border-color: rgba(255,255,255,0.35);
+}
+
+/* Optional: tiny extra lift on hover for polish */
+.logo-band-hit.is-hover .logo-band-img{
+  transform: translate3d(0, -2px, 0);
+}
+
+/* Mobile: keep it clean and readable */
+@media (max-width: 560px){
+  .logo-band-hit{
+    border-radius: 16px;
+    padding: 1.05rem;
+  }
+  .logo-band-img{
+    width: 100%;
+  }
+}
+/* =========================
+   FULL-BLEED LOGO BANNER
+   ========================= */
+
+   .logo-banner{
+    width: 100vw;
+    margin-left: calc(50% - 50vw); /* full-bleed inside any layout */
+    margin-right: calc(50% - 50vw);
+    padding: clamp(1.2rem, 4vw, 2.6rem) 0;
+  
+    /* no box */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    /* subtle polish */
+    transition: background-color .22s ease;
+  }
+  
+  .logo-banner__img{
+    width: min(1400px, 92vw); /* “majority of width” but controlled */
+    height: auto;
+    display: block;
+  
+    /* remove any “boxed” look */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  
+    /* fade-in on load */
+    opacity: 0;
+    transform: translateY(6px);
+    animation: logoFadeIn .55s ease forwards;
+    animation-delay: .10s;
+  
+    /* smooth swap/track feel */
+    transition: transform .12s ease, filter .22s ease;
+    will-change: transform;
+  }
+  
+  @keyframes logoFadeIn{
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* hover: red background only for banner */
+  .logo-banner:hover{
+    background: #ff0000;
+  }
+  
+  /* when banner is red, logo should be the white one (via JS swap) */
+  .logo-banner:hover .logo-banner__img{
+    filter: none;
+  }
+  
+  .signature-strip{
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    height: 10px;
+    opacity: .95;
+  }
   

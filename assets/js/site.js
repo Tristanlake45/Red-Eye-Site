@@ -78,3 +78,30 @@ async function loadPartial(selector, partialPath) {
     }, SHOW_MS);
   })();
   
+  (function () {
+    const banner = document.querySelector(".logo-banner");
+    const img = document.querySelector(".logo-banner__img");
+    if (!banner || !img) return;
+  
+    const normalSrc = img.getAttribute("src");
+    const hoverSrc = img.dataset.hover;
+  
+    banner.addEventListener("mouseenter", () => {
+      if (hoverSrc) img.src = hoverSrc;
+    });
+  
+    banner.addEventListener("mouseleave", () => {
+      img.src = normalSrc;
+      img.style.transform = "";
+    });
+  
+    banner.addEventListener("mousemove", (e) => {
+      const r = banner.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;  // -0.5..0.5
+      const y = (e.clientY - r.top) / r.height - 0.5;
+  
+      const maxMove = 10; // px
+      img.style.transform = `translate(${x * maxMove}px, ${y * maxMove}px)`;
+    });
+  })();
+  
