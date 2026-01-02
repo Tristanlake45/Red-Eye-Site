@@ -58,3 +58,23 @@ async function loadPartial(selector, partialPath) {
     if (y) y.textContent = new Date().getFullYear();
   }
   
+  // Intro splash (white fade + logo)
+(function () {
+    const intro = document.getElementById("intro");
+    if (!intro) return;
+  
+    // Fade logo in
+    requestAnimationFrame(() => {
+      intro.classList.add("is-on");
+    });
+  
+    const SHOW_MS = 700;
+    const FADE_MS = 550;
+  
+    // Fade out + remove
+    setTimeout(() => {
+      intro.classList.add("is-off");
+      setTimeout(() => intro.remove(), FADE_MS + 50);
+    }, SHOW_MS);
+  })();
+  
