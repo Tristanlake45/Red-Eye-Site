@@ -78,30 +78,36 @@ async function loadPartial(selector, partialPath) {
     }, SHOW_MS);
   })();
   
-  (function () {
+  function initLogoBanner() {
     const banner = document.querySelector(".logo-banner");
     const img = document.querySelector(".logo-banner__img");
     if (!banner || !img) return;
   
-    const normalSrc = img.getAttribute("src");
-    const hoverSrc = img.dataset.hover;
+    const whiteLogo = img.getAttribute("src");       // white logo (default)
+    const redLogo   = img.dataset.hover;             // red logo
+  
+    if (banner.dataset.bound === "1") return;
+    banner.dataset.bound = "1";
   
     banner.addEventListener("mouseenter", () => {
-      if (hoverSrc) img.src = hoverSrc;
+      img.src = redLogo;
     });
   
     banner.addEventListener("mouseleave", () => {
-      img.src = normalSrc;
+      img.src = whiteLogo;
       img.style.transform = "";
     });
   
     banner.addEventListener("mousemove", (e) => {
       const r = banner.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;  // -0.5..0.5
+      const x = (e.clientX - r.left) / r.width - 0.5;
       const y = (e.clientY - r.top) / r.height - 0.5;
   
-      const maxMove = 10; // px
+      const maxMove = 10;
       img.style.transform = `translate(${x * maxMove}px, ${y * maxMove}px)`;
     });
-  })();
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    initLogoBanner();
+  });
   
