@@ -67,15 +67,17 @@
     border-radius: 12px;
   }
   
-  /* ===== NAV ===== */
-  .site-nav{
+ /* ===== NAV (FORCE STICKY) ===== */
+.site-nav{
     position: sticky;
     top: 0;
-    z-index: 50;
-    background: rgba(248,248,248,0.84);
+    z-index: 99999;
+    width: 100%;
+    background: rgba(248,248,248,0.92);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
   }
+  
   
   .nav-inner{
     display:flex;
@@ -1088,42 +1090,160 @@
 
 /* ===== FULL-BLEED LOGO BANNER ===== */
 
-.logo-banner{
+/* assets/css/site.css (UPDATED: your current CSS + minimal banner sync additions)
+   NOTE: keep everything you already have, but REMOVE the old .logo-banner block at the bottom.
+   Replace that old block with the one below.
+*/
+
+/* ...KEEP ALL YOUR EXISTING CSS ABOVE... */
+
+/* =========================
+   LOGO BANNER: SYNCED SWAP + TWITCH (EVERY 3s)
+   - Background flips red <-> white
+   - Logos crossfade white <-> red at the same moment
+   - Twitch happens at the swap moment
+   ========================= */
+
+   .logo-banner{
     width: 100vw;
     margin-left: calc(50% - 50vw);
     padding: clamp(3rem, 8vw, 6rem) 1rem;
   
-    background: #ff0000; /* RED by default */
     display: flex;
     justify-content: center;
     align-items: center;
-  
-    transition: background-color 0.35s ease;
     overflow: hidden;
+  
+    /* start RED */
+    background: #ff0000;
+  
+    /* synced background swap every 3s */
+    animation: bannerSwap 3s steps(1, end) infinite;
   }
   
-  .logo-banner:hover{
-    background: #ffffff; /* WHITE on hover */
+  
+  .logo-banner__twitch{
+    position: relative;
+    width: 100%;
+    will-change: transform;
+    animation: logoTwitch 3s infinite; /* twitch lives here now */
   }
   
   .logo-banner__img{
-    width: min(1400px, 92vw);
+    width: 100%;
     height: auto;
     display: block;
-  
-    opacity: 0;
-    transform: translateY(6px);
-    animation: logoFadeIn .55s ease forwards;
-    animation-delay: .1s;
-  
-    transition: transform .12s ease;
-    will-change: transform;
+    user-select: none;
+    position: absolute;
+    inset: 0;
   }
   
-  @keyframes logoFadeIn{
-    to{
-      opacity: 1;
-      transform: translateY(0);
+  .logo-banner__img--white{
+    position: relative;
+    opacity: 1;
+    animation: logoWhiteSwap 3s steps(1, end) infinite;
+  }
+  
+  .logo-banner__img--red{
+    opacity: 0;
+    animation: logoRedSwap 3s steps(1, end) infinite;
+  }
+  
+  
+  /* Background flip: red -> white at 50% mark */
+  @keyframes bannerSwap{
+    0%   { background: #ff0000; }
+    50%  { background: #ffffff; }
+    100% { background: #ffffff; }
+  }
+  
+  /* Logo crossfade as a hard swap at the same time as background */
+  @keyframes logoWhiteSwap{
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  
+  @keyframes logoRedSwap{
+    0%   { opacity: 0; }
+    50%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  
+  /* Twitch: quick up/down right at the swap moment (50%) */
+  /* ===== LOGO MICRO-TWITCH ===== */
+@keyframes logoTwitch {
+    0%   { transform: translate3d(0, 0, 0); }
+    20%  { transform: translate3d(0, -1.5px, 0); }
+    40%  { transform: translate3d(0, 1px, 0); }
+    60%  { transform: translate3d(0, -0.5px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
+  
+  .logo-banner__img.is-twitching {
+    animation: logoTwitch 120ms linear;
+  }
+  
+  
+  
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce){
+    .logo-banner,
+    .logo-banner__track,
+    .logo-banner__img--white,
+    .logo-banner__img--red{
+      animation: none !important;
     }
+    .logo-banner{ background: #ff0000; }
+    .logo-banner__img--white{ opacity: 1; }
+    .logo-banner__img--red{ opacity: 0; }
+  }
+  
+  /* ===== NAV: ALWAYS VISIBLE WHILE SCROLLING ===== */
+.site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+  }
+  
+  /* Prevent any hover styles from changing banner sizing */
+.logo-banner:hover{
+    padding: clamp(3rem, 8vw, 6rem) 1rem !important;
+    background: inherit; /* background still controlled by animation */
+  }
+  
+  /* Ensure no hover rule is scaling the track or images */
+  .logo-banner:hover .logo-banner__track,
+  .logo-banner:hover .logo-banner__img{
+    width: inherit;
+    max-width: none;
+  }
+  
+  /* Sticky breaks if a parent has overflow set */
+html, body{
+    overflow-x: hidden; /* ok */
+    overflow-y: visible; /* important: don’t set hidden here */
+  }
+  
+  /* If you have any wrapper around the nav (or the whole page), it must NOT do this:
+     overflow: hidden/auto/scroll;
+  */
+  .wrap,
+  main,
+  .site-footer{
+    overflow: visible;
+  }
+  
+  /* Prevent any hover styles from changing banner sizing */
+.logo-banner:hover{
+    padding: clamp(3rem, 8vw, 6rem) 1rem !important;
+    background: inherit; /* background still controlled by animation */
+  }
+  
+  /* Ensure no hover rule is scaling the track or images */
+  .logo-banner:hover .logo-banner__track,
+  .logo-banner:hover .logo-banner__img{
+    width: inherit;
+    max-width: none;
   }
   

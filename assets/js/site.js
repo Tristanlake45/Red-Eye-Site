@@ -1,3 +1,5 @@
+/* assets/js/site.js (UPDATED) */
+
 async function loadPartial(selector, partialPath) {
     const el = document.querySelector(selector);
     if (!el) return;
@@ -13,7 +15,7 @@ async function loadPartial(selector, partialPath) {
     // Active nav link
     const path = window.location.pathname.replace(/\/$/, "");
     const links = el.querySelectorAll("a[data-nav]");
-    links.forEach(a => {
+    links.forEach((a) => {
       const target = a.getAttribute("href").replace(/\/$/, "");
       if (target === path || (target === "" && path === "")) {
         a.classList.add("active");
@@ -59,11 +61,10 @@ async function loadPartial(selector, partialPath) {
   }
   
   // Intro splash (white fade + logo)
-(function () {
+  (function () {
     const intro = document.getElementById("intro");
     if (!intro) return;
   
-    // Fade logo in
     requestAnimationFrame(() => {
       intro.classList.add("is-on");
     });
@@ -71,43 +72,37 @@ async function loadPartial(selector, partialPath) {
     const SHOW_MS = 700;
     const FADE_MS = 550;
   
-    // Fade out + remove
     setTimeout(() => {
       intro.classList.add("is-off");
       setTimeout(() => intro.remove(), FADE_MS + 50);
     }, SHOW_MS);
   })();
   
-  function initLogoBanner() {
+  function initLogoBannerMouseTrack() {
     const banner = document.querySelector(".logo-banner");
-    const img = document.querySelector(".logo-banner__img");
-    if (!banner || !img) return;
+    const track = document.querySelector(".logo-banner__track");
+    if (!banner || !track) return;
   
-    const whiteLogo = img.getAttribute("src");       // white logo (default)
-    const redLogo   = img.dataset.hover;             // red logo
+    if (banner.dataset.trackBound === "1") return;
+    banner.dataset.trackBound = "1";
   
-    if (banner.dataset.bound === "1") return;
-    banner.dataset.bound = "1";
-  
-    banner.addEventListener("mouseenter", () => {
-      img.src = redLogo;
-    });
-  
-    banner.addEventListener("mouseleave", () => {
-      img.src = whiteLogo;
-      img.style.transform = "";
-    });
+    const maxMove = 8; // px (subtle)
   
     banner.addEventListener("mousemove", (e) => {
       const r = banner.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
+      const x = (e.clientX - r.left) / r.width - 0.5;  // -0.5..0.5
       const y = (e.clientY - r.top) / r.height - 0.5;
   
-      const maxMove = 10;
-      img.style.transform = `translate(${x * maxMove}px, ${y * maxMove}px)`;
+      track.style.transform = `translate3d(${x * maxMove}px, ${y * maxMove}px, 0)`;
+    });
+  
+    banner.addEventListener("mouseleave", () => {
+      track.style.transform = "";
     });
   }
+  
   document.addEventListener("DOMContentLoaded", () => {
-    initLogoBanner();
+    initLogoBannerMouseTrack();
   });
+  
   
