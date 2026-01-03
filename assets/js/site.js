@@ -24,6 +24,18 @@ async function loadPartial(selector, partialPath) {
   
     // IMPORTANT: nav exists now, so wire up mobile toggle now
     initMobileNav();
+  
+    // If nav is fixed, keep body padding in sync with actual nav height
+    syncNavHeight();
+    window.addEventListener("resize", syncNavHeight, { passive: true });
+  }
+  
+  function syncNavHeight() {
+    const nav = document.getElementById("site-nav");
+    if (!nav) return;
+  
+    const h = Math.ceil(nav.getBoundingClientRect().height);
+    document.documentElement.style.setProperty("--nav-h", `${h}px`);
   }
   
   function initMobileNav() {
@@ -45,11 +57,13 @@ async function loadPartial(selector, partialPath) {
       setOpen(!isOpen);
     });
   
+    // Close on link click (mobile)
     nav.addEventListener("click", (e) => {
       const a = e.target.closest("a");
       if (a) setOpen(false);
     });
   
+    // Close on Escape
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setOpen(false);
     });
@@ -60,7 +74,9 @@ async function loadPartial(selector, partialPath) {
     if (y) y.textContent = new Date().getFullYear();
   }
   
-  // Intro splash (white fade + logo)
+  /* =========================
+     INTRO SPLASH (white fade + logo)
+     ========================= */
   (function () {
     const intro = document.getElementById("intro");
     if (!intro) return;
@@ -78,6 +94,15 @@ async function loadPartial(selector, partialPath) {
     }, SHOW_MS);
   })();
   
+  /* =========================
+     LOGO BANNER: mouse track (no layout change)
+     Requires markup:
+     <section class="logo-banner">
+       <div class="logo-banner__track">
+         <img class="logo-banner__img" ...>
+       </div>
+     </section>
+     ========================= */
   function initLogoBannerMouseTrack() {
     const banner = document.querySelector(".logo-banner");
     const track = document.querySelector(".logo-banner__track");
@@ -90,9 +115,8 @@ async function loadPartial(selector, partialPath) {
   
     banner.addEventListener("mousemove", (e) => {
       const r = banner.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;  // -0.5..0.5
+      const x = (e.clientX - r.left) / r.width - 0.5; // -0.5..0.5
       const y = (e.clientY - r.top) / r.height - 0.5;
-  
       track.style.transform = `translate3d(${x * maxMove}px, ${y * maxMove}px, 0)`;
     });
   
@@ -101,8 +125,20 @@ async function loadPartial(selector, partialPath) {
     });
   }
   
+  /* =========================
+   
+  
+  /* =========================
+     Boot
+     ========================= */
   document.addEventListener("DOMContentLoaded", () => {
+    // If nav is inline on some pages (not partial-loaded), still sync it
+    syncNavHeight();
+    window.addEventListener("resize", syncNavHeight, { passive: true });
+  
     initLogoBannerMouseTrack();
+    initLogoBannerTwitch();
   });
+  
   
   
