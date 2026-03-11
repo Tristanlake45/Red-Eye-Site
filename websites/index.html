@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Websites | Red Eye Films</title>
+  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="icon" type="image/png" href="/assets/img/redEyeCircleLogo.png">
+  <link rel="apple-touch-icon" href="/assets/img/redEyeCircleLogo.png">
+</head>
+<body>
+
+  <div id="nav-slot"></div>
+
+  <main class="wrap">
+    <section class="hero" style="padding-bottom: 1.4rem;">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker"><span class="kicker-dot"></span> Web Development</div>
+          <h1>Websites</h1>
+          <p>
+            A selection of sites I’ve designed and developed, with an emphasis on visual styling,
+            user experience, domain setup, deployment, and the technical structure behind the build.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/work/">View Work</a>
+          <a class="btn btn-ghost" href="/contact/">Contact</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="h2">Overview</div>
+      <p class="lead">
+        I styled and developed the Red Eye Films site, the Kids Against Hunger Sioux Falls site,
+        and the VVI Crew site from start to finish — handling visual design, page structure,
+        domain configuration, deployment, and the back-end/security-oriented setup needed to keep
+        them reliable and functional. The Lakes Lodge site was completed as a collaboration through my workplace.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="h2">Featured Sites</div>
+
+      <div class="website-grid">
+
+        <!-- Kids Against Hunger -->
+        <article class="website-card">
+          <a class="website-preview" href="https://kidsagainsthungersiouxfalls.org/" target="_blank" rel="noopener">
+            <iframe
+              src="https://kidsagainsthungersiouxfalls.org/"
+              title="Kids Against Hunger Sioux Falls website preview"
+              loading="lazy">
+            </iframe>
+            <div class="website-preview-overlay">Open site ↗</div>
+          </a>
+
+          <div class="website-body">
+            <div class="website-kicker">Built start to finish</div>
+            <h2 class="website-title">Kids Against Hunger Sioux Falls</h2>
+            <p class="website-text">
+              Developed, coded, and styled from the ground up as a clean replacement site for a local nonprofit,
+              with a focus on clarity, accessibility, external donation and scheduling flows, and dependable deployment.
+            </p>
+
+            <div class="website-links">
+              <a class="btn btn-ghost" href="https://kidsagainsthungersiouxfalls.org/" target="_blank" rel="noopener">Visit Site</a>
+              <a class="btn btn-primary" href="https://www.southeasttech.edu/news/2026/tristan-lake-kids-against-hunger.php" target="_blank" rel="noopener">Read Article</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- VVI Crew -->
+        <article class="website-card">
+          <a class="website-preview" href="https://www.vvicrew.com/" target="_blank" rel="noopener">
+            <iframe
+              src="https://www.vvicrew.com/"
+              title="VVI Crew website preview"
+              loading="lazy">
+            </iframe>
+            <div class="website-preview-overlay">Open site ↗</div>
+          </a>
+
+          <div class="website-body">
+            <div class="website-kicker">Built start to finish</div>
+            <h2 class="website-title">VVI Crew</h2>
+            <p class="website-text">
+              Styled and developed as a complete site build, balancing bold presentation with clear navigation,
+              responsive behavior, and a polished branded web presence.
+            </p>
+
+            <div class="website-links">
+              <a class="btn btn-primary" href="https://www.vvicrew.com/" target="_blank" rel="noopener">Visit Site</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Red Eye -->
+        <article class="website-card">
+          <a class="website-preview" href="/" rel="noopener">
+            <iframe
+              src="/"
+              title="Red Eye Films website preview"
+              loading="lazy">
+            </iframe>
+            <div class="website-preview-overlay">Open site ↗</div>
+          </a>
+
+          <div class="website-body">
+            <div class="website-kicker">Built start to finish</div>
+            <h2 class="website-title">Red Eye Films</h2>
+            <p class="website-text">
+              My own portfolio and storefront build, designed to reflect my visual style while handling navigation,
+              hosting, domain setup, and the overall front-end system architecture.
+            </p>
+
+            <div class="website-links">
+              <a class="btn btn-primary" href="/" rel="noopener">Visit Site</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lakes Lodge -->
+        <article class="website-card">
+          <a class="website-preview" href="https://www.lakeslodgesd.com/" target="_blank" rel="noopener">
+            <iframe
+              src="https://www.lakeslodgesd.com/"
+              title="Lakes Lodge website preview"
+              loading="lazy">
+            </iframe>
+            <div class="website-preview-overlay">Open site ↗</div>
+          </a>
+
+          <div class="website-body">
+            <div class="website-kicker">Workplace collaboration</div>
+            <h2 class="website-title">Lakes Lodge</h2>
+            <p class="website-text">
+              A collaborative site project completed through my workplace, contributing to the presentation,
+              structure, and overall direction of the build.
+            </p>
+
+            <div class="website-links">
+              <a class="btn btn-primary" href="https://www.lakeslodgesd.com/" target="_blank" rel="noopener">Visit Site</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-slot"></div>
+
+  <script src="/assets/js/site.js"></script>
+  <script>
+    loadPartial("#nav-slot", "/partials/nav.html");
+    loadPartial("#footer-slot", "/partials/footer.html");
+    setYear();
+  </script>
+</body>
+</html>
