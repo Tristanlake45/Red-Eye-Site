@@ -136,6 +136,16 @@
   .gallery-item img { width: 100%; height: 100%; min-height: 360px; max-height: 680px; object-fit: cover; filter: saturate(.82) contrast(1.05); transition: transform .65s cubic-bezier(.2,.75,.2,1), filter .35s; }
   .gallery-item:hover img { transform: none !important; filter: saturate(1) contrast(1.1); }
   .gallery-item:hover { z-index: 5; transform: translateY(-8px) scale(1.035); box-shadow: 0 28px 65px rgba(0,0,0,.24); }
+  .graphics-instructions { margin: .85rem 0 0; color: var(--muted); font: 750 .68rem/1.4 var(--mono); letter-spacing: .075em; text-transform: uppercase; }
+  #graphics .gallery--floating.is-floating { position: relative; display: block; height: 2200px; overflow: hidden; isolation: isolate; border: 2px solid var(--ink); background-color: rgba(255,255,255,.26); background-image: linear-gradient(rgba(0,0,0,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px); background-size: 32px 32px; }
+  #graphics .gallery--floating.is-floating .gallery-item,
+  #graphics .gallery--floating.is-floating .gallery-item:nth-child(7n + 1),
+  #graphics .gallery--floating.is-floating .gallery-item:nth-child(7n + 5) { position: absolute; inset: 0 auto auto 0; display: block; width: 240px !important; max-width: none !important; min-height: 0; grid-column: auto; border: 0 !important; background: transparent !important; touch-action: none; user-select: none; cursor: grab; transform-origin: center; will-change: transform; transition: box-shadow .3s ease, filter .3s ease; }
+  #graphics .gallery--floating.is-floating .gallery-item:hover,
+  #graphics .gallery--floating.is-floating .gallery-item:focus-visible { box-shadow: 0 32px 72px rgba(0,0,0,.3) !important; filter: saturate(1.06); }
+  #graphics .gallery--floating.is-floating .gallery-item.is-dragging { cursor: grabbing; box-shadow: 0 36px 82px rgba(0,0,0,.34) !important; }
+  #graphics .gallery--floating.is-floating .gallery-pad { width: 100% !important; max-width: none !important; height: auto; }
+  #graphics .gallery--floating.is-floating .gallery-item img { display: block; width: 100% !important; max-width: none !important; height: auto; min-height: 0; max-height: none !important; aspect-ratio: auto 4 / 3; object-fit: contain; pointer-events: none; }
   #lightbox.lightbox { display: none; opacity: 0; padding: clamp(.75rem, 2vw, 1.5rem); background: rgba(8,8,8,.46); backdrop-filter: blur(0); transition: opacity .38s ease, backdrop-filter .48s ease; }
   #lightbox.lightbox.open, #lightbox.lightbox.is-closing { display: flex !important; }
   #lightbox.lightbox.open { opacity: 1; backdrop-filter: blur(18px); }
@@ -263,4 +273,3 @@
     .ticker-track { animation: none; }
     .reveal-ready { opacity: 1; transform: none; }
   }
-  

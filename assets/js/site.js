@@ -117,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", syncNavHeight, { passive: true });
 
   initLogoBannerMouseTrack();
-  initLogoBannerTwitch();
 });
 
 
@@ -176,7 +175,7 @@ if (!id) return "";
 return `
   <a class="video-tile" href="${v.youtube}" data-yt="${id}" data-key="${indexKey}">
     <div class="video-thumb">
-      <img src="${ytThumb(id)}" alt="${v.title}">
+        <img src="${ytThumb(id)}" alt="${v.title}" loading="lazy" decoding="async">
       <div class="video-play" aria-hidden="true">▶</div>
     </div>
     <div class="video-title">${v.title}</div>
@@ -364,9 +363,265 @@ function initDragScroll() {
   });
 }
 
+async function initFloatingGraphics() {
+  const gallery = document.getElementById("gallery");
+  if (!gallery || !gallery.classList.contains("gallery--floating")) return;
+
+  const elements = Array.from(gallery.querySelectorAll(".gallery-item"));
+  if (!elements.length) return;
+
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const images = elements.map((element) => element.querySelector("img")).filter(Boolean);
+  const states = elements.map((element, index) => ({
+    element,
+    index,
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    scale: 1,
+    targetScale: 1,
+    hovered: false,
+    focused: false,
+    dragging: false,
+    suppressClick: false,
+    pointerId: null,
+    pointerStartX: 0,
+    pointerStartY: 0,
+    itemStartX: 0,
+    itemStartY: 0
+  }));
+
+  let active = false;
+  let animationFrame = 0;
+  let previousTime = 0;
+  let resizeFrame = 0;
+  const edgePadding = () => gallery.clientWidth < 620 ? 16 : 38;
+
+  function boundsFor(state) {
+    const padding = edgePadding();
+    return {
+      maxX: Math.max(padding, gallery.clientWidth - state.element.offsetWidth - padding),
+      maxY: Math.max(padding, gallery.clientHeight - state.element.offsetHeight - padding)
+    };
+  }
+
+  function clampState(state) {
+    const bounds = boundsFor(state);
+    const padding = edgePadding();
+    state.x = Math.min(bounds.maxX, Math.max(padding, state.x));
+    state.y = Math.min(bounds.maxY, Math.max(padding, state.y));
+  }
+
+  function render(state) {
+    state.element.style.setProperty("transform", `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) scale(${state.scale.toFixed(4)})`, "important");
+  }
+
+  function layoutItems() {
+    gallery.classList.add("is-floating");
+    const arenaWidth = gallery.clientWidth;
+    const padding = edgePadding();
+    const columns = arenaWidth >= 1240 ? 5 : arenaWidth >= 900 ? 4 : arenaWidth >= 620 ? 3 : 2;
+    const cellWidth = (arenaWidth - padding * 2) / columns;
+    const widthFactors = [.78, .9, .84, .94, .82];
+    const minimumWidth = arenaWidth < 620 ? 118 : 170;
+
+    states.forEach((state) => {
+      const width = Math.min(310, Math.max(minimumWidth, cellWidth * widthFactors[state.index % widthFactors.length]));
+      state.element.style.setProperty("width", `${width}px`, "important");
+    });
+
+    const rows = Math.ceil(states.length / columns);
+    const rowHeights = Array.from({ length: rows }, () => 0);
+    states.forEach((state) => {
+      const row = Math.floor(state.index / columns);
+      rowHeights[row] = Math.max(rowHeights[row], state.element.offsetHeight);
+    });
+
+    const rowGap = Math.max(arenaWidth < 620 ? 54 : 86, cellWidth * .34);
+    const rowTops = [];
+    let nextTop = padding;
+    rowHeights.forEach((height, row) => {
+      rowTops[row] = nextTop;
+      nextTop += height + rowGap;
+    });
+    gallery.style.height = `${Math.max(1500, Math.ceil(nextTop + padding))}px`;
+
+    states.forEach((state) => {
+      const column = state.index % columns;
+      const row = Math.floor(state.index / columns);
+      const horizontalRoom = Math.max(0, cellWidth - state.element.offsetWidth);
+      const jitterX = Math.sin((state.index + 1) * 2.17) * Math.min(14, horizontalRoom * .25);
+      const jitterY = Math.cos((state.index + 1) * 1.73) * Math.min(20, rowGap * .18);
+      state.x = padding + column * cellWidth + horizontalRoom / 2 + jitterX;
+      state.y = rowTops[row] + jitterY;
+
+      const angle = (state.index * 2.399963) + .55;
+      const speed = 7 + (state.index % 6) * 1.35;
+      state.vx = Math.cos(angle) * speed;
+      state.vy = Math.sin(angle) * speed;
+      state.scale = 1;
+      state.targetScale = 1;
+      clampState(state);
+      render(state);
+    });
+  }
+
+  function animate(time) {
+    if (!active) return;
+    const delta = previousTime ? Math.min((time - previousTime) / 1000, .05) : 0;
+    previousTime = time;
+    const lightboxOpen = document.getElementById("lightbox")?.classList.contains("open");
+
+    states.forEach((state) => {
+      state.scale += (state.targetScale - state.scale) * Math.min(1, delta * 12);
+
+      if (!lightboxOpen && !state.hovered && !state.focused && !state.dragging) {
+        state.x += state.vx * delta;
+        state.y += state.vy * delta;
+        const bounds = boundsFor(state);
+        const padding = edgePadding();
+        if (state.x <= padding || state.x >= bounds.maxX) state.vx *= -1;
+        if (state.y <= padding || state.y >= bounds.maxY) state.vy *= -1;
+        clampState(state);
+      }
+
+      render(state);
+    });
+
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function activate() {
+    if (active || reduceMotion) return;
+    active = true;
+    layoutItems();
+    previousTime = 0;
+    animationFrame = requestAnimationFrame(animate);
+  }
+
+  function deactivate() {
+    if (!active) return;
+    active = false;
+    cancelAnimationFrame(animationFrame);
+    gallery.classList.remove("is-floating");
+    gallery.style.height = "";
+    states.forEach((state) => {
+      state.element.classList.remove("is-dragging");
+      state.element.style.width = "";
+      state.element.style.transform = "";
+      state.element.style.zIndex = "";
+    });
+  }
+
+  states.forEach((state) => {
+    const element = state.element;
+    element.addEventListener("dragstart", (event) => event.preventDefault());
+    element.addEventListener("pointerenter", () => {
+      if (!active || !canHover.matches) return;
+      state.hovered = true;
+      state.targetScale = 1.12;
+      element.style.zIndex = "20";
+    });
+    element.addEventListener("pointerleave", () => {
+      if (!canHover.matches) return;
+      state.hovered = false;
+      if (!state.dragging && !state.focused) {
+        state.targetScale = 1;
+        element.style.zIndex = "";
+      }
+    });
+    element.addEventListener("focus", () => {
+      if (!active) return;
+      state.focused = true;
+      state.targetScale = 1.12;
+      element.style.zIndex = "20";
+    });
+    element.addEventListener("blur", () => {
+      state.focused = false;
+      if (!state.hovered && !state.dragging) {
+        state.targetScale = 1;
+        element.style.zIndex = "";
+      }
+    });
+    element.addEventListener("pointerdown", (event) => {
+      if (!active || (event.pointerType === "mouse" && event.button !== 0)) return;
+      state.pointerId = event.pointerId;
+      state.pointerStartX = event.clientX;
+      state.pointerStartY = event.clientY;
+      state.itemStartX = state.x;
+      state.itemStartY = state.y;
+      state.suppressClick = false;
+      if (!canHover.matches) {
+        state.targetScale = 1.075;
+        element.style.zIndex = "30";
+      }
+      element.setPointerCapture(event.pointerId);
+    });
+    element.addEventListener("pointermove", (event) => {
+      if (!active || state.pointerId !== event.pointerId) return;
+      const dx = event.clientX - state.pointerStartX;
+      const dy = event.clientY - state.pointerStartY;
+      if (!state.dragging && Math.hypot(dx, dy) > 6) {
+        state.dragging = true;
+        state.suppressClick = true;
+        state.targetScale = 1.075;
+        element.classList.add("is-dragging");
+        element.style.zIndex = "30";
+      }
+      if (!state.dragging) return;
+      event.preventDefault();
+      state.x = state.itemStartX + dx;
+      state.y = state.itemStartY + dy;
+      clampState(state);
+    });
+
+    const finishDrag = (event) => {
+      if (state.pointerId !== event.pointerId) return;
+      state.pointerId = null;
+      if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId);
+      state.dragging = false;
+      element.classList.remove("is-dragging");
+      const remainsActive = (canHover.matches && state.hovered) || state.focused;
+      state.targetScale = remainsActive ? 1.12 : 1;
+      element.style.zIndex = remainsActive ? "20" : "";
+    };
+    element.addEventListener("pointerup", finishDrag);
+    element.addEventListener("pointercancel", finishDrag);
+    element.addEventListener("lostpointercapture", finishDrag);
+    element.addEventListener("click", (event) => {
+      if (!state.suppressClick) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      state.suppressClick = false;
+    }, true);
+  });
+
+  const respondToViewport = () => {
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+      if (!reduceMotion) {
+        if (!active) activate();
+        else layoutItems();
+      } else {
+        deactivate();
+      }
+    });
+  };
+
+  window.addEventListener("resize", respondToViewport, { passive: true });
+  images.forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener("load", respondToViewport, { once: true });
+    img.addEventListener("error", respondToViewport, { once: true });
+  });
+  activate();
+}
+
 function initGalleryTilt() {
   if (reduceMotion || window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
   document.querySelectorAll(".gallery-item").forEach((item) => {
+    if (item.closest("#graphics")) return;
     let frame = 0;
     item.addEventListener("pointermove", (event) => {
       const rect = item.getBoundingClientRect();
@@ -390,6 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPageLinks();
   initReveals();
   initDragScroll();
+  initFloatingGraphics();
   initGalleryTilt();
 });
 })();
