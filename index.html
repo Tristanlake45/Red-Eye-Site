@@ -5,48 +5,57 @@
   <title>Red Eye Films</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/overhaul.css" />
   <link rel="icon" type="image/png" href="/assets/img/redEyeCircleLogo.png">
   <link rel="apple-touch-icon" href="/assets/img/redEyeCircleLogo.png">
 </head>
-<body>
-
-  <div id="intro" class="intro" aria-hidden="true">
-    <img
-      src="/assets/img/redEyeLogo.png"
-      alt="Red Eye Films"
-      class="intro-logo"
-    >
-  </div>
+<body class="home-page">
 
   <div id="nav-slot"></div>
 
-  <section class="logo-banner" aria-label="Red Eye Films header">
-    <div class="logo-banner__track">
-      <div class="logo-banner__twitch">
-        <img class="logo-banner__img logo-banner__img--white" src="assets/img/redeyeTextWhiteLogo.png" alt="Red Eye Films" draggable="false" />
-        <img class="logo-banner__img logo-banner__img--red" src="assets/img/redEyeTextlogo.png" alt="" aria-hidden="true" draggable="false" />
+  <header class="hero hero-campaign">
+    <div class="wrap campaign-grid">
+      <div class="campaign-copy">
+        <div class="campaign-meta"><span>Creative studio</span><span>Sioux Falls / 2026</span></div>
+        <h1 aria-label="Design. Video. Web."><span>Design.</span><span>Video.</span><span>Web.</span></h1>
+        <p>Red Eye Films is the creative outlet of Tristan Lake — graphic design, video production, websites, commercial work, and photography.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/work/">Explore selected work <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-ghost" href="/contact/">Start a project</a>
+        </div>
+      </div>
+      <a class="campaign-art" href="/work/" aria-label="View featured Red Eye Films work">
+        <img src="/assets/img/DropThaBallYo.png" alt="Featured graphic design by Red Eye Films">
+        <span class="campaign-stamp">Selected work<br>01 / 03</span>
+        <span class="campaign-caption">Visual systems built to hit at speed.</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="ticker" aria-label="Red Eye Films services">
+    <div class="ticker-track">
+      <div class="ticker-set">
+        <span>Graphic design</span><i>●</i><span>Video production</span><i>●</i><span>Web development</span><i>●</i><span>Photography</span><i>●</i><span>Campaigns</span><i>●</i><span>Editing</span><i>●</i>
+      </div>
+      <div class="ticker-set" aria-hidden="true">
+        <span>Graphic design</span><i>●</i><span>Video production</span><i>●</i><span>Web development</span><i>●</i><span>Photography</span><i>●</i><span>Campaigns</span><i>●</i><span>Editing</span><i>●</i>
+      </div>
+    </div>
+  </div>
+
+  <section class="home-profile" aria-labelledby="home-profile-title">
+    <div class="wrap home-profile-grid">
+      <div class="home-profile-label"><span>About the studio</span><span>01 / Profile</span></div>
+      <div class="home-profile-copy">
+        <h2 id="home-profile-title">Creative direction<br>with technical depth.</h2>
+        <div class="home-profile-detail">
+          <p>Red Eye Films is the independent creative practice of Tristan Lake—a full-time Marketing Coordinator working across video production, graphic design, web design, campaign strategy, and development.</p>
+          <p>With an Associate degree in Computer Programming from Southeast Technical College and hands-on experience in marketing analytics, backend development, and campaign execution, I build work that looks distinctive and functions reliably.</p>
+          <a class="btn btn-ghost" href="/about/">More about Tristan ↗</a>
+        </div>
       </div>
     </div>
   </section>
-
-  <div class="signature-strip" aria-hidden="true"></div>
-
-  <header class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <div class="kicker"><span class="kicker-dot"></span>Studio</div>
-        <h1>Red Eye Films</h1>
-        <p>
-          Red Eye Films is the creative outlet of Tristan Lake — offering graphic design, video production and editing, website development, commercial work, and photography.
-        </p>
-      </div>
-
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="/work/">View Work</a>
-        <a class="btn btn-ghost" href="/contact/">Contact</a>
-      </div>
-    </div>
-  </header>
 
   <main>
     <div class="wrap">
@@ -178,6 +187,24 @@
               </div>
             </div>
           </div>
+
+          <div class="featured-note" style="margin-top:1.2rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase;">
+            Featured Productions
+          </div>
+
+          <div class="scroller" style="margin-top:.8rem;">
+            <div class="tile" style="padding:.75rem;">
+              <div style="position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:14px;">
+                <iframe src="https://www.youtube.com/embed/rTKRercgzJA?rel=0" title="Featured video production" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+              </div>
+            </div>
+
+            <div class="tile" style="padding:.75rem;">
+              <div style="position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; border-radius:14px;">
+                <iframe src="https://www.youtube.com/embed/4Scnlhzq_I4?rel=0" title="Featured video production" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- WEBSITES -->
@@ -188,6 +215,17 @@
           </div>
 
           <div class="scroller" style="margin-top:.9rem;">
+            <a class="tile-link" href="https://www.verneidedentsfilm.com/" target="_blank" rel="noopener">
+              <article class="tile">
+                <div class="tag"><span class="dot"></span> Identity / Film / Web</div>
+                <div class="name">Vern Eide Dents Film</div>
+                <div class="desc">
+                  Complete workplace campaign: logo design, video production, and full website design and development.
+                </div>
+                <div class="cta">Visit site ↗</div>
+              </article>
+            </a>
+
             <a class="tile-link" href="/websites/">
               <article class="tile">
                 <div class="tag"><span class="dot"></span> Built Start to Finish</div>
@@ -238,15 +276,12 @@
       <section class="section">
         <div class="h2">Services</div>
         <div class="pill-grid">
-          <div class="pill">Graphic Design</div>
-          <div class="pill">Video Production</div>
-          <div class="pill">Video Editing</div>
-          <div class="pill">Website Development</div>
-          <div class="pill">Commercial Work</div>
-          <div class="pill">Photography</div>
-          <a class="pill" href="https://shop.red-eye-films.com" target="_blank" rel="noopener">
-            Merch
-          </a>
+          <div class="pill"><span>01</span><strong>Graphic Design</strong><small>Identity / Print / Campaign</small></div>
+          <div class="pill"><span>02</span><strong>Video Production</strong><small>Concept / Direction / Shoot</small></div>
+          <div class="pill"><span>03</span><strong>Video Editing</strong><small>Edit / Color / Delivery</small></div>
+          <div class="pill"><span>04</span><strong>Website Development</strong><small>Design / Build / Launch</small></div>
+          <div class="pill"><span>05</span><strong>Commercial Work</strong><small>Strategy / Production / Rollout</small></div>
+          <div class="pill"><span>06</span><strong>Photography</strong><small>Portrait / Product / Editorial</small></div>
         </div>
       </section>
 

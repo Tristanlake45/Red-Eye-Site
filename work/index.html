@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Work | Red Eye Films</title>
   <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/overhaul.css" />
   <link rel="icon" type="image/png" href="/assets/img/redEyeCircleLogo.png">
   <link rel="apple-touch-icon" href="/assets/img/redEyeCircleLogo.png">
 </head>
@@ -19,16 +20,12 @@
           <div class="kicker"><span class="kicker-dot"></span> Portfolio</div>
           <h1>Design + Video</h1>
           <p>Browse by category</p>
+          <nav class="work-category-nav" aria-label="Work categories">
+            <a class="btn btn-ghost" href="#graphics">Design</a>
+            <a class="btn btn-ghost" href="#photo">Photography</a>
+            <a class="btn btn-ghost" href="#video">Video</a>
+          </nav>
         </div>
-      </div>
-    </section>
-
-    <!-- QUICK TABS -->
-    <section class="section" style="padding-top: 15px;">
-      <div class="hero-actions" style="justify-content:flex-start;">
-        <a class="btn btn-ghost" href="#video">Video</a>
-        <a class="btn btn-ghost" href="#graphics">Graphics</a>
-        <a class="btn btn-ghost" href="#photo">Photography</a>
       </div>
     </section>
 
@@ -128,6 +125,35 @@
             <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:14px;">
               <iframe src="https://www.youtube.com/embed/1OHVtiJ_7tw?rel=0"
                 title="Vern Eide Marine Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-block">
+        <div class="featured-head">
+          <div class="featured-title">Featured Productions</div>
+          <div class="featured-note">YouTube</div>
+        </div>
+
+        <div class="scroller" style="margin-top:.9rem;">
+          <div class="tile" style="padding:.75rem;">
+            <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:14px;">
+              <iframe src="https://www.youtube.com/embed/rTKRercgzJA?rel=0"
+                title="Featured video production"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+            </div>
+          </div>
+
+          <div class="tile" style="padding:.75rem;">
+            <div style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:14px;">
+              <iframe src="https://www.youtube.com/embed/4Scnlhzq_I4?rel=0"
+                title="Featured video production"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
                 style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
@@ -433,20 +459,7 @@
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lightbox-card" role="dialog" aria-modal="true" aria-label="Image viewer">
-      <div class="lightbox-top">
-        <div class="lightbox-title" id="lightbox-title"></div>
-
-        <div class="lightbox-left">
-          <button class="icon-btn" id="lb-prev" type="button">Prev</button>
-          <button class="icon-btn" id="lb-next" type="button">Next</button>
-        </div>
-
-        <div class="lightbox-right">
-          <a class="icon-btn" id="lb-open" href="#" target="_blank" rel="noopener">Open</a>
-          <button class="icon-btn" id="lb-close" type="button">Close</button>
-        </div>
-      </div>
-
+      <button class="lightbox-x" id="lb-close" type="button" aria-label="Close image viewer">×</button>
       <div class="lightbox-body">
         <img id="lb-img" alt="">
       </div>
@@ -460,50 +473,51 @@
       const galleryLinks = Array.from(document.querySelectorAll("#gallery .gallery-item, #photo-gallery .gallery-item"));
       const lightbox = document.getElementById("lightbox");
       const lbImg = document.getElementById("lb-img");
-      const btnPrev = document.getElementById("lb-prev");
-      const btnNext = document.getElementById("lb-next");
       const btnClose = document.getElementById("lb-close");
-      const openLink = document.getElementById("lb-open");
+      let activeLink = null;
 
-      let index = 0;
-
-      function setIndex(newIndex){
-        index = (newIndex + galleryLinks.length) % galleryLinks.length;
-        const href = galleryLinks[index].getAttribute("href");
-        lbImg.src = href;
-        lbImg.alt = "Red Eye Films work image";
-        openLink.href = href;
-      }
-
-      function openLightbox(startIndex){
-        setIndex(startIndex);
+      function openLightbox(link){
+        activeLink = link;
+        const source = link.querySelector("img");
+        const start = source.getBoundingClientRect();
+        lbImg.src = link.getAttribute("href");
+        lbImg.alt = source.alt;
         lightbox.classList.add("open");
         lightbox.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
-        btnNext.focus();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const end = lbImg.getBoundingClientRect();
+          const dx = start.left + start.width / 2 - (end.left + end.width / 2);
+          const dy = start.top + start.height / 2 - (end.top + end.height / 2);
+          const sx = Math.max(.05, start.width / end.width);
+          const sy = Math.max(.05, start.height / end.height);
+          lbImg.animate([
+            { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, filter: "blur(8px)", opacity: .45 },
+            { transform: "translate(0,0) scale(1)", filter: "blur(0)", opacity: 1 }
+          ], { duration: 620, easing: "cubic-bezier(.16,1,.3,1)" });
+        }));
+        btnClose.focus({ preventScroll: true });
       }
 
       function closeLightbox(){
+        lightbox.classList.add("is-closing");
         lightbox.classList.remove("open");
         lightbox.setAttribute("aria-hidden", "true");
-        lbImg.src = "";
-        openLink.href = "#";
         document.body.style.overflow = "";
-        galleryLinks[index]?.focus?.();
+        window.setTimeout(() => {
+          lightbox.classList.remove("is-closing");
+          lbImg.src = "";
+        }, 420);
+        activeLink?.focus?.({ preventScroll: true });
       }
 
-      function next(){ setIndex(index + 1); }
-      function prev(){ setIndex(index - 1); }
-
-      galleryLinks.forEach((a, i) => {
+      galleryLinks.forEach((a) => {
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          openLightbox(i);
+          openLightbox(a);
         });
       });
 
-      btnNext.addEventListener("click", next);
-      btnPrev.addEventListener("click", prev);
       btnClose.addEventListener("click", closeLightbox);
 
       lightbox.addEventListener("click", (e) => {
@@ -513,11 +527,7 @@
       window.addEventListener("keydown", (e) => {
         if(!lightbox.classList.contains("open")) return;
         if(e.key === "Escape") closeLightbox();
-        if(e.key === "ArrowRight") next();
-        if(e.key === "ArrowLeft") prev();
       });
-
-      lbImg.addEventListener("click", next);
     })();
 
     loadPartial("#nav-slot", "/partials/nav.html");
